@@ -1,0 +1,35 @@
+- colsole 창
+cd ..  :  이전 파일로 돌아가기
+md (파일명)  : 파일 생성
+rd (파일명) : 파일 삭제
+echo : print와 같다고 보면  됨
+echo (내용) > (문서명.txt) : 내용을 포함한 txt파일 생성
+tasklist : 실행되고 있는 프로세스을 보여주는 명령어
+tasklist  | findstr (검색할 단어) : 실행중인 프로세스 중에서 검색하는 기능
+ipconfig -all : ip의 자세한 정보 표시
+
+- 리눅스 
+VirtualBox 7.0.14 설치
+VM : virtual machine 
+우분투 ubuntu 설치
+Server > 밑에 Alternative  downloads > 20.04 LTS설치
+
+Oracle VM virualBox 에서 파일 새로 만들고 iso 파일 입력후 실행
+기본세팅 
+profile setup	ubuntu 1234
+나머지는 추가 없이 done
+
+
+
+- 이론
+stateless server
+연결하고 끊는 서버
+stateful server
+연결이 계속 지속되는 서버
+
+WebSocket / FCM 
+stateful 로 만드는 것들
+
+Web Server / WAS 차이 알면 좋음
+
+Jar / War 차이 알면 좋음 -> Tomcat?
