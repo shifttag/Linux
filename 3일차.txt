@@ -1,0 +1,183 @@
+ex)
+1. ubuntu 유저의 홈 디렉터리로 이동한다
+	cd ~
+2. 상대 경로를 사용하여 /home/linux_3/testing 디렉터리를 생성한다
+	mkdir -p ./linux_3/testing
+3. 우분투 홈 디렉터리에서 /home/linux_3/testing 에 다음 내용을 가진 hello.txt 파일을 생성한다
+	cd ~
+	touch /home/ubuntu/linux_3/testing/hello.txt
+
+Hello again!
+It's me Linux!
+4. 해당 파일을 상대 경로를 사용하여 내용을 출력시킨다
+	cd /home/ubuntu/linux_3/testing
+	echo "Hello again!" >> hello.txt
+	echo "It's me Linux" >> hello.txt
+	cat hello.txt
+5. 파일을 삭제하지 않은 상태에서 /home/linux_3을 삭제한다
+	cd ~
+	rm -r /home/ubuntu/linux_3
+
+텍스트 에디터
+: 메모장, 한글, 워드 등이 텍스트 에디터이다
+
+	vi -> 기본적인 텍스트 에디터
+	vim -> vi 보다 발전한 텍스트 에디터
+
+1. 명령어 조합이 가능
+	| : 파이프라인 <- 명령어 조합기
+2. 정규표현식 사용 가능
+3. 모드형 텍스트 에디터
+	- 명령모드 : esc키 누르면 명령모드
+	- 입력모드 : i키 입력시 입력모드
+	i <- 현재 커서 앞부터 입력 시작
+	a <- 현재 커서 뒤부터 입력 시작
+	shift + i <- 문장 시작부분 부터 입력 시작
+	shift + a <- 문장 끝 부분 부터 입력 시작
+	:w <- 저장
+	:q <- 나가기
+	:q! <- 강제 나가기(저장 안됨)
+	:wq <- 저장하고 나가기
+
+	이동 : 방향키, jkhl(위 : k, 아래 : j, 좌 : h, 우 : l)
+	문장 제일 앞으로 이동 -> 0
+	문장 제일 뒤로 이동 -> $
+	현재 커서에서 다음 단어로 이동 -> w
+	현재 커서에서 이전 단어로 이동 -> b
+	앞으로 3단어 이동 -> 3w
+	뒤로 3단어 이동 -> 3b
+	보이는 화면에서 제일 위로 이동 -> H
+	보이는 화면에서 제일 아래로 이동 -> L
+	보이는 화면에서 중간으로 이동 -> M
+	파일의 제일 앞으로 이동 -> gg
+	파일의 제일 뒤로 이동 -> G
+	10번째 행으로 이동 -> 10G
+	문단 시작으로 이동 -> {
+	문단 끝으로 이동 -> }
+	페이지 단위로 위로 이동 -> ctrl + u
+	페이지 단위로 아래로 이동 -> ctrl + d
+	현재 행을 복사 -> yy
+	붙여 넣기 -> p
+	행 삭제(잘라내기) -> dd (delete)
+	되돌리기 -> u (undo)
+	앞으로 돌리기 -> R(redo)
+	이전에 실행한 명령어 다시 실행 -> .
+	드래그(셀렉트) -> v
+	멀티 커서 -> ctrl + v
+	검색 기능 -> /단어
+
+	단어 세개 삭제 -> d3w
+	단어 한개 삭제 -> dw, daw (a word)
+	한 문장 삭제 -> das
+	w 단어, s 문장, p 문단
+	태그 내 내용 삭제 -> dit
+	태그를 포함하여 삭제 -> dat
+	현재 커서부터 아래로 2줄 삭제 -> d2j
+	현재 커서부터 위로 2줄 삭제 -> d2k
+	<> 안에 있는 내용 삭제 -> di<
+	{} 안에 있는 내용 삭제 -> di{
+	{} 포함 내용 삭제 -> da{
+	현재 커서부터 {} 앞까지 삭제 -> dt{
+	현재 커서부터 {} 포함 삭제 -> df{
+	현재 커서부터 첫 hello 까지 내용 삭제 -> d/hello
+
+vi, vim, nano
+서버 환경에 따라서 nano 설치되어 있지 않음
+vi, vim <- 리눅스 설치시 기본 설치
+nano <- 배포판에 따라서 설치 되지 않음
+
+test.txt 만들고 vim test.txt
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Google</title>
+	<link rel="stylesheet" type="text/css" href="./css/style.css"/>
+	<style>
+	.header{
+		padding: 5px;
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		height: 10vh;
+	}
+	.header-item{
+		padding: 10px;
+	{
+	</style>
+</head>
+
+Scanner
+BufferedReader
+텍스트 내용 <- 하드디스크
+버퍼에 컴퓨터 언어로 되어 있는 텍스트 내용을
+조금씩 cpu 갖다준다
+버퍼링 = 버퍼에 내용이 없다
+I/O <- Input/Output
+WAS
+프론트 - 백 - DB
+
+1. 파일 복사 붙여넣기
+	cp 복사할파일 붙여넣을파일
+	- copy 줄임말
+	cp index1.html index2.html 
+	cp index1.html ./sub1/index2.html (다른 디렉터리에 복사할때) 
+
+	cp -r sub1 sub2 (디렉터리 복사)
+	cp index2.html ./sub1 (html파일을 sub1디렉토리 안에 복사붙여넣기)
+
+	cp index.html index2.html ./sub3 (앞에 두 파일을 sub3디렉토리 안에 복사붙여넣기)
+
+	cp -i index.html index2.html ./sub1 (같은 파일이 있으면 덮어쓸껀지 여부를 물어본다)
+
+2. 파일 옮기기
+	mv 옮길파일 옮길디렉토리
+	mv index2.html sub4
+	-move 줄임말
+	mv 파일이동 및 이름 변경
+
+	mv 옮길파일 옮길파일 (이름바꾸기)
+	mv index2.html index3.html (index2.html 을 index3.html로 이름을 바꿀수 있다)
+
+	mv index3.html sub4/index4.html (index3.html을 sub4 디렉터리로 옮기면서 index4.html로 이름을 바꾼다)
+
+3. 파일 찾기
+	find  : 현재 위치에서 파일 찾기
+	find . 찾을파일명 : 하위폴더까지 찾는 명령어
+
+정규표현식(Regular Expression)
+	문자열 규칙 찾기
+	
+	/hello <- 정확히 hello라는게 존재해야 찾아짐
+	/he 로 시작하는 단어 <- 정규표현식 사용해야함
+
+	회원가입
+	아이디 (8~12자 까지 허용, 영어만 사용 가능)
+	비밀번호 (8~12자 까지 허용, 영어랑 특수문자 사용 가능)
+	이메일 (assd@naver.com) 
+	전화번호 (010-2222-3333)
+	-> 정규 표현식으로 사용자가 보낸 정보가 규칙에 부합하는지 확인이 필요하다
+
+	^index -> index로 시작하는 문자열
+	index$ -> index로 끝나는 문자열
+	i...x -> i로 시작하고 x로 끝나는 5개의 문자열 (index, idddx)
+	i*x -> i로 시작하고 x로 끝나는 모든 문자열(문자열 갯수 상관없음)
+	index[123] -> index 단어가 포함되고 그 뒤에 숫자 1,2,3이 있는 문자열(index1, index2, index3)
+	index[1-7] -> index 단어가 포함되고 그 뒤에 숫자 1~7까지 있는 문자열
+	[a-z] -> 알파벳 a~z까지 범위 검색
+	[^a] -> a가 포함된 파일 제외 문자열 검색
+
+	이메일 정규표현식 [a-z0-9]+@[a-z]+\.[a-z]{2,3}
+			, [a-zA-Z0-9]+[@][a-zA-Z0-9]+(.com|.net|.co.kr)
+which 찾을실행파일 : 실행파일을 찾아낼수 있다
+
+
+
+
+
+
+
+
+
+
