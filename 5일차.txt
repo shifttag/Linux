@@ -1,0 +1,233 @@
+복습 문제
+	1. 기본 권한을 소유자는 모든 권한, 그룹은 읽기 쓰기 권한, 기타 유저는 읽기 권한으로 설정한다
+	$ umask 013
+	$ umask -S
+	2. 새로운 authority1, authority2, authority3 파일을 생성한다
+	$ touch authority1 authority2 authority3
+	3. 새로운 authority-dir1, authority-dir2 디렉터리를 생성한다
+	$ mkdir authority-dir1 authority-dir2
+	4. authority1 : 소유자는 쓰기와 실행 권한, 그룹은 실행 권한, 기타 유저는 아무 권한을 주지 않는다
+	$ chmod 310 authority1
+	$ ls -l authority1
+	5. authority2 : 소유자는 모든 권한을, 그룹은 읽기와 실행 권한, 기타 유저는 읽기 권한을 준다
+	$ chmod 754 authority2
+	$ ls -l authority2
+	6. authority3 : 소유자는 모든 권한을 주고 그룹과 기타유저에게는 아무 권한을 주지 않는다. 그리고 해당 파일에 SetUID 권한을 준다
+	$ chmod 4700 authority3
+	$ ls -l authority3
+	7. authority-dir1 : 소유자와 그룹에게는 모든 권한을 준다. 기타 유저에게는 아무 권한을 주지 않는다
+	$ chmod 770 authority-dir1
+	$ ls -ld authority-dir1
+	8. authority-dir2 : 모든 카테고리에 모든 권한을 준다. 그리고 sticky bit를 설정한다
+	$ chmod 1777 authority-dir2
+	$ ls -ld authority-dir2
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------5일차
+
+< 사용자 관리 > 
+최신 OS들에는 사용자가 있음
+다중 사용자 시스템
+사용자에게 접근 권한을 통제할 수 있음
+
+ubuntu 계정은 일반 유저
+root 관리자 계정
+
+su(switch user) <- 계정 전환
+su root <- 관리자 계정으로 전환
+
+sudo passwd root <- 관리자 계정 패스워드 설정
+
+vim /etc/passwd 
+- 계정 정보들이 저장된 파일
+
+root:x:0:0:root:/root:/bin/bash
+아이디:x:UID:GID:설명:홈디렉터리:로그인쉘
+
+아이디에 특수문자가 들어가게되면 시스템 상에서 에러를 발생시킬 우려가 굉장히 커진다
+숫자로된 UID 사용하는 이유 : 특수문자가 들어갈수 없기때문
+시스템 장애를 일으킬 위험 X
+
+ambigouse error <- 나는 결과값이 하나만 나올줄 알았는데 왜 두개가 나오지?? 헷갈려
+
+vim /etc/shadow
+- 비밀번호 저장된 파일
+
+기본적인 암호화 기법
+	
+< 해시 함수 >
+임의 크기의 데이터를 고정된 크기의 데이터로 매핑하는 함수
+
+	계정	ubuntu -> ubuntu
+		1234    -> 암호화(해시 함수)
+
+		1234 	 -> aaaaaaaa
+		11112222 -> aaadddsc
+
+		1234 -> aaaa
+		5678 -> bbbb
+		1234 -> aaaa	(기본적인 암호화 방법 : 레인보우 테이블)
+		password -> dddd
+	8자 이상 특수문자 사용해 주세요
+	1q2w3e4r! -> eeee
+
+	salt의 등장 
+	동일한 비밀번호도 서로 다른 솔트 값 때문에 다른 해시 값을 가지게 된다
+	암호화가 평문을 암호문으로 바꾸는 거
+	복호화는 암호문을 평문으로 바꾸는 거
+
+	SHA 알고리즘
+	유닉스 시간 - 솔트값을 유닉스 시간을 기반으로 돌림(랜덤값)
+	daemon:*:19430:0:99999:7:::
+	계정명:비밀번호:유닉스시간:MIN:MAX:WARNING:INACTIVE:EXPIRE
+		- MIN : 암호 변경 후 변경할 수 없는 시간 (생략가능)
+		- MAX : 해당 암호 최대 사용 허용 기간
+		- WARNING : 만료 전 경고를 보여주는 기간
+		- INACTIVE : 만료된 후 로그인이 가능한 기간
+		- EXPIRE : 사용자 계정 만료 기간
+
+	2038년 1월 19일에 유닉스 시간이 문제를 일으킴
+	유닉스 : 32비트로 구성되어 있음.
+	시작 시간이 1970년 1월 1일
+
+	패스워드 에이징 : 컴퓨터 시스템에서 사용자의 암호를 주기적으로 변경하도록 요구하는 정책 또는 기술
+	
+	패스워드 에이징 수정 명령어
+	chage(change age)
+		-m : MIN 수정
+		-M : MAX 수정
+		-W : WARNING 수정
+		-I : INACTIVE 수정
+		-E : EXPIRE 수정
+	chage -m 3 -E 2024-06-11 user2 (user2의 MIN을 3일로 설정, EXPIRE는 날짜 형식으로 적어야함)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+< 계정 만들기 >
+useradd : 사용자 계정 생성
+useradd user1
+useradd -u 2000 user2
+
+passwd : 비밀번호 변경
+passwd user1
+
+useradd -D
+	SEKL : 홈 디렉터리를 만들 때 기본적으로 세팅되는 파일들이 저장된 곳
+
+useradd
+	-m : 홈 디렉터리 생성
+	-u : uid 지정
+	-g : gid 지정
+	-D : 기본값 출력
+	-d : 홈 디렉터리 지정
+
+	useradd -u 2001 -g 3001 -m user5
+
+	pk (primary key : 기본키) : uid
+	- 시스템이 구별하는 방법
+	fk (foreign key : 외래키) : gid
+	
+	fk 거는 이유
+		글 작성 으로 설명
+		boardid 	title	content
+		1	hello	hello!		삭제 금지!
+
+		replyid	content	boardid(fk)
+		1	1	1	
+		2	hellodd	1
+		3	3	2
+< 계정 변경 >
+usermod(user modify : 유저 수정)
+	usermod -u 3000 -g 1000 user1 (user1의 uid를 3000 gid를 1000번으로 수정)
+	-u : uid 수정
+	-g : gid 수정
+	-d : 홈 디렉터리 수정
+	-l : 계정 이름 변경
+	-s : 로그인 쉘 수정
+
+< 계정 삭제 >
+userdel(user delete)
+	userdel user3 (user3 계정을 삭제한다 -> 홈 디렉터리는 삭제가 안됨)
+	리눅스는 실제 계정 정보를 삭제한다
+	userdel -r user4 (홈 디렉터리 포함 계정 삭제 -> not found 에러 떠도 지워짐)
+
+	id 1
+	username ubuntu
+	password 암호화
+	email
+	role 계정권한 (admin, user, manager)
+	cteatedDate(계정 생성일)
+	updateDate(계정 마지막 수정일)
+	deleteDate(계정 삭제일)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+로깅(Logging)
+	- 서버에서 어떤 작업을 하고 있는지 나타내는 글자
+	- 5가지 단계 : Error > Warn > Info > Debug > Trace
+		- Error : 요청한 결과를 도출하지 못함
+		- Warn : 요청한 결과 성공은 하지만 불안정함
+		- Info ~ Trace 성공함
+
+	패키지 매니저
+	apt is interactive 경고 로그가 발생할 수 있음
+
+	vim /etc/group
+	그룹 정보 파일을 볼 수 있다
+	root:x:0:
+	그룹이름:x:GID:그룹멤버 
+
+	vim /etc/gshadow 
+	그룹 비밀번호 정보 파일을 볼 수 있다
+	ubuntu:!::
+	그룹이름:그룹암호:관리자:그룹멤버
+
+	sudo passwd root
+	sudo(superuser do) : 관리자 권한으로 실행 (root 계정으로 실행) 
+			관리자 권한으로 실행할 수 있는 것들이 지정되어 있음
+			첫 생성 사용자 계정에는 sudo 권한이 부여된다
+	passwd root -> 비밀번호 변경 명령어
+
+다음주 월요일
+
+- sudo 권한 주기
+- 파일 소유자 변경
+- 패키지 매니저
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
