@@ -1,0 +1,129 @@
+< 지난 시간 보충 >
+
+파일 권한 변경
+	chmod 777 파일 이름
+
+chown (change owner)
+파일 소유자 변경  (관리자만 사용 가능)
+	sudo chown 계정명 파일이름
+	sudo chown 계정명 : 그룹명 파일이름 
+	chown -R : 하위 파일 까지 같이 변경
+
+사용자 생성 : useradd
+그룹 생성 : groupadd 
+	vim /etc/group : 그룹 확인 
+	vim /etc/passwd : 사용자 확인
+
+< 지난 강의 복습 문제 >
+1. linuxuser1 유저를 생성합니다
+2. linuxuser1 의 패스워드를 4455 로 변경합니다
+3. linuxuser2 유저를 생성합니다 UID는 5322번으로 설정합니다
+4. linuxuser3 유저를 생성합니다 그룹은 linuxuser1과 동일한 그룹으로 지정합니다
+5. linuxgroup1 그룹을 생성합니다 :5324
+6. linuxuser2 를 linuxgroup1 그룹에 등록합니다
+7. linux-home-dir-test 디렉터리를 /home 에 생성합니다
+8. linuxuser3의 홈 디렉터리를 linux-home-dir-test로 변경합니다
+9. new-file1 파일을 생성하고, 소유자를 linuxuser2 로 설정합니다 소유그룹은 linuxgroup1 으로 설정합니다
+
+< 답안 >
+1. useradd linuxuser1
+2. sudo passwd linuxuser1
+3. useradd linuxuser2 -u 5322
+4. useradd linuxuser3 -g 3001
+	(vim /etc/passwd 로 그룹 확인 : 3001 OR grep linuxuser1 /etc/passwd)
+5. groupadd linuxgroup1
+6. 	(vim /etc/group 로 그룹 확인 : 5324 OR grep linuxgroup1 /etc/group)
+   usermod -g 5324 linuxuser2
+7. sudo mkdir /home/linux-home-dir-test
+8. sudo usermod -d /home/linux-home-dir-test linuxuser3
+	(grep linuxuser3 /etc/passwd)
+9. touch new-file1
+   sudo chown linuxuser2:linuxgroup1 new-file1
+	(ls -l new-file1)
+
+권한이 안되서 실행이 안되는 것은 앞에 sudo 를 붙여주면 된다
+< 정리 >
+	useradd : 계정생성
+	usermod : 계정 정보 변경
+	userdel : 계정 삭제
+	passwd : 패스워드 변경
+
+	UID : 시스템이 인식하는 계정인덱스
+	GID : 시스템이 인식하는 그룹인덱스
+
+< 6일차 >
+sudo : 관리자권한으로 실행 (관리자만 실행할 수 있는 명령어들이 있음)
+
+패키지 매니저
+	ex)
+	1. 롤 다운로드 페이지로 이동
+	2. 롤 설치 프로그램을 다운로드 
+	3. 설치 프로그램을 실행
+	4. 설치하면서 설정~~~
+	5. 롤 설치 완료
+
+	패키지 매니저는 위 기능을 한번에 실행해준다
+
+	리스트 ( 우분투 패키지 저장소 ) 
+	- 리그오브 레전드
+	- 한글 프로그램 필요
+
+	우분투(데비안계열)는 해당 프로그램이 필요한 프로그램들을 같이 설치 해줌
+
+	DI(Dependency Inject) : 의존성 주입
+
+	APT (Advanced Packaging Tool) 
+	패키지의 설치, 업데이트, 삭제, 의존성 해결 등을 관리하는 데 사용
+	apt(데비안 계열 패키지 매니저 명령어)
+	vsftpd
+	apt-cache search : 리스트에서 검색
+	apt-cache show : 패키지 상세보기
+	apt-get update : 리스트 업데이트
+	apt-cache showpkg : 의존성 보기(특정 패키지에 대한 세부 정보를 표시하는 데 사용됩니다. 
+				이 명령은 패키지의 종속성, 버전, 설치된 파일 등을 보여줍니다)
+	apt-get install : 패키지 설치
+	apt-get download : 패키지 설치파일 다운로드
+	apt-get remove : 패키지 삭제(설정 파일X)
+	apt-get remove --purge : 설정파일 포함 패키지 삭제
+	apt-get purge : 설정파일 포함 패키지 삭제
+	apt-get autoremove : 자동 설치 패키지 삭제 (명령어 서브명령어)
+
+	dpkg(Debian Packaging)	( 관리자만 실행가능 명령어 )
+	dpkg -i 설치파일명 : 패키지 설치
+	dpkg -r 설치파일명 : 패키지 삭제
+
+	.exe
+	.deb
+
+	MacOS 패키지 매니저 : homebrew
+	WindowsOS 패키지 매니저 : chochlaty
+
+도커 : 가상화 머신 컨테이너
+
+서버 운영체제(OS) 
+스프링 부트 프로젝트를 실행하기 위한 프로그램 (JDK라는 프로그램이 필요, 기타등등)
+
+	도커 사용 이유
+	     1. 신뢰도가 높음
+	     2. 세팅 속도가 빠름. (빠른 실행) 
+	
+	도커 컴포즈
+	- 여러개의 컨테이너를 관리하는 컨트롤러
+	1번 컨테이너, 2번 컨테이너
+
+PPA (Personal Package Archive)
+
+- OS 버전 확인하는 방법
+
+파일 압축 & 아카이브 
+
+프로세스 관리
+
+
+
+
+
+
+
+
+
