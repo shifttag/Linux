@@ -1,0 +1,140 @@
+< 지난 강의 >
+파일 시스템 & 디스크 관리
+
+	fdisk -l : 현재 디스크 정보 확인
+	fdisk /dev/sdb : 디스크 관리
+	mkfs : 파일시스템 생성
+	mount : 디스크 마운트
+		 
+< 10일차 >
+
+< PV, VG, LV>
+내가 가지고 있는 디스크가 25GB 2개, 저장해야할 파일이 30GB
+	-> LVM 
+
+		15GB
+	
+		PV(Physical Volume) - VG(Volume Group) - LV(Logical Volume)
+
+	sdb1 15G
+
+	lvm 만들기 전에 마운트 해제해야함
+	
+	sdb2 10G - 합치기 - mylvm 1
+	sdc1 25G
+
+	1. PV 생성
+	2. VG 생성 (myvg1)
+	3. VG 활성화
+	4. LV 생성 (mylvm1)
+	5. LV에 파일시스템 생성
+	6. LV 마운트 (/mnt/mylvm1)
+
+	( 정답 )
+	0. sudo fdisk /dev/sdc -> n -> p -> 1 -> (Enter) -> (Enter) -> w
+		fdisk -l
+	1. sudo pvscan 확인 후 sudo pvcreate  /dev/sdb2 -> y
+		pvcreate  /dev/sdc1 -> y
+		(마운트 해제 방법) : umount /mnt/hdd1
+	2. sudo vgcreate myvg1 /dev/sdb2 /dev/sdc1
+		sudo vgdisplay -v myvg1
+	3. sudo vgchange -a y myvg1
+	4. lvcreate -l 100%vg -n mylvm1 myvg1 
+		sudo lvscan
+	5. 
+	6.
+
+< 파이프 & 입출력 리다이렉션 >
+
+	| : 파이프
+	>, >> : 표준 출력
+
+	명령어1 | 명령어2
+	1234 ---->
+	출력값을 명령어2 에 전달 	
+
+	ls | grep express
+
+	리눅스 철학
+	작은것은 아름답다.
+
+	출력 리다이렉션 종류
+	1. 출력 리다이렉션
+	2. 오류 리다이렉션
+
+< 작업 예약 명령어 >
+	at : 정해진 시간에 한번 실행
+	cron : 정해진 시간마다 반복 실행
+	
+	crontab -e
+
+	* * * * * ls -l : 매분마다 ls -l 명령어
+	0 3 * * * ls -l : 3시 마다 ls -l 명령어	 
+	(분) (시) (일) (월) (요일) <명령어>
+		(요일 : 0 = 일요일 - 6 = 토요일)
+	0 3 * * 1 ls -l : 월요일 3시 마다 ls -l 명령어 실행
+	
+	0 3-5 * * 1 ls -l : 월요일 3~5시까지 한시간씩 마다 ls -l 명령어 실행
+	0 3,5 * * 1 ls -l : 월요일 3시, 5시 마다 ls -l 명령어 실행
+
+ 	0,30 * * * 1 : 월요일 30분 단위로 실행
+
+< 방화벽 >
+	ufw
+	
+	ufw enable : 방화벽 활성
+	ufw status (numbered) : 방화벽 상태 확인
+	ufw default allow : 기본전략을 allow로 변경
+	ufw default deny : 기본전략을 deny로 변경
+	ufw allow 22/tcp(ufw allow 포트번호/프로토콜) : 포트번호/프로토콜 만 허가
+
+	인바운드 / 아웃바운드
+	인바운드 : 들어오는 애들 통제
+			
+	아웃바운드 : 내보낼 곳 통제
+
+	서버
+	요청 - 응답
+
+	내 ip만 5000번 포트 tcp 허용하기 
+	: sudo ufw allow from 192.168.3.29 to any port 5000 proto tcp
+	허용되있는 특정 ip 포트 삭제
+	: sudo ufw delete allow from 192.168.3.29 to any port 5000 proto tcp
+	(or) : sudo ufw delete 2
+	
+	
+방화벽 기본 전략
+	
+	allow / deny
+	1. allow : 모든 사람들에 대해 허가
+	2. deny : 모든 사람들에 대해 거부
+
+< 프로토콜 >
+	TCP(양방향) / UDP(단방향)
+	TCP : 
+		1. 요청 준비
+		2. 요청 준비 확인 완료
+		3. 요청
+	UDP : 
+		1. 요청 or 응답
+
+< 네트워크 >
+	
+	서킷 스위칭 / 패킷 스위칭 (통신단위 : 패킷)
+	
+	서킷 스위칭 : 통신동안 통신 경로를 독점적으로 사용
+			- 이 경로는 통신이  종료될 때 까지 유지
+			- 통신중에 경로가 끊기지 않아서 데이터 전송의 신뢰성이 높다
+			- 경로를 독점적으로 사용하기 때문에 경로에 필요한 회선이 적으면 경로 할당을 못함.
+			- 전화 통신에서 사용된다.
+			
+	패킷 스위칭 : 데이터를 작은 조각인 패킷으로 나누고, 각 패킷을 독립적으로 전송하는 방식
+			- 데이터를 패킷이라는 단위로 분할한다.
+			- 패킷을 나눠서 전달
+			- 수신측은 패킷을 다시 조립한다
+			- 패킷에는 목적지 주소, 순서 정보 등이 포함
+			- 필요할때만 네트워크 리소스를 사용함
+			- 네트워크를 효율적으로 사용할 수 있다
+			- 패킷이 손실이 일어날 수 있다.
+
+
