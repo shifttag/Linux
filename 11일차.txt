@@ -1,0 +1,125 @@
+< 11일차 >
+
+< 원격 접속 >
+telnet / ssh
+	서버 - 원격 접속 당할 애
+		xinetd, telnet
+	클라이언트 - 원격 접속 할 애
+		telnett 클라이언트
+
+	리눅스 telnet 세팅하기 및 윈도우에서 원격접속하기
+	호스트 IP : 192.168.3.29
+	호스트 포트 : 23
+	게스트 IP : 10.0.2.15
+	게스트 포트 : 23
+
+https://itlearningcenter.tistory.com/entry/%E3%80%90Ubuntu-2004-LTS%E3%80%91Telnet-%EC%84%A4%EC%B9%98
+https://kjun.kr/479
+
+		sudo apt install xinetd
+		sudo apt install telnetd
+		sudo vim /etc/xinetd.d/telnet
+			service telnet
+			{
+ 				disable         = no
+ 				flags           = REUSE
+ 				socket_type     = stream
+  				wait            = no
+ 				user            = root
+				server          = /usr/sbin/in.telnetd
+ 				log_on_failure  += USERID
+			}
+
+		sudo systemctl status xinetd	- Active : active 떠야 실행중
+		sudo systemctl restart xinetd 	- 재시작
+
+		sudo ufw allow telnet - 방화벽 허용 시켜주기
+
+	cmd 창에서 telnet 192.168.3.29
+	로그인 하면 원격 접속 가능함
+	
+	서버를 만든다.
+	하루 동시 접속자 100명, 소켓이 100개 있어야 함 
+
+	TCP(stream) / UDP(datagram)
+
+	멀티스레드(wait = no) / 싱글스레드(wait = yes)
+
+< 정리 >
+	1. 패키지 설치 (xinetd)
+	2. xinetd 설정
+	3. xinetd 재실행
+	4. 텔넷 클라이언트를 설치
+	5. 방화벽 설정
+	6. 원격 접속
+
+< 파일 전송 프로토콜 (FTP) >
+	FTP : 원격 파일 송수신 
+	port 20, 21
+
+		sudo apt install vsftpd
+		sudo vim /etc/vsftpd.conf
+			listen=NO
+			listen_ipv6=YES
+			anonymous_enable=YES
+			local_enable = YES
+			write_enable = YES
+			local_umask = 022
+			anon_upload_enable=YES
+			anon_mkdir_wirte_enable=YES
+			dirmessage_enable = YES
+			use_localtime = YES
+			xferlog_enable = YES
+			connect_from_port_20 = YES
+			chown_uploads = YES
+			chown_username = ubuntu
+			xferlog_file=/var/log/vsftpd.log
+			xferlog_std_format=YES
+			idle_session_timeout=600
+			secure_chroot_dir=/var/run/vsftpd/empty
+			pam_service_name=vsftpd
+			rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+			rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+			ssl_enable=NO
+		
+		sudo systemctl status vsftpd
+		ftp 10.0.2.15 -> ubuntu -> 1234 ->successful
+		sudo ufw allow ftp
+		sudo ufw status
+		
+		cmd 창에 들어가서
+		ftp -> open  192.168.3.29 -> ubuntu -> 1234
+		pwd
+		
+프론트 개발자
+- 화면 그리기 : 퍼블리셔
+- 서버로부터 데이터 요청
+- 데이터 화면에 입히기
+- 프론트 서버 배포
+
+< 리팩토링 >
+: 기존 코드를 수정하는거(기능 수정X)
+-> 기능 수정없이 코드만 수정
+
+	유지 보수를 하게 되면
+	1. 기존 기능 수정
+	2. 기능 추가
+	3. 기능 삭제
+
+	코딩을 하게 되면
+	작업을 하면 할 수록 기능 하나 구현하는데 시간이 더 걸린다.
+
+	프론트 리팩토링
+	- 컴포넌트화
+
+	백엔드 리팩토링
+	- 코드 가시성 증가
+	- 함수를 재사용할 수 있도록 커스텀
+
+
+
+
+
+
+
+
