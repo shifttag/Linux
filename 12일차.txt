@@ -1,0 +1,113 @@
+< 12일차 >
+
+< SSH >
+
+	telnet : 원격 접속 프로토콜
+	SSH : 원격 접속 프로토콜(보안이 적용되어 있다)
+
+	보안의 3요소 (CIA)
+		Confidentiality(기밀성) : 데이터 암호화, 인가받은 사용자만 접근해야 한다.
+		Intergrity(무결성) : 인가한 방법으로만 데이터 변경 가능
+		Availaility(가용성) : 정보에 접근이 가능해야 한다.
+	
+	RSA 보안 방식(공개키 비밀키)
+
+		1. 비밀키와 공개키가 있다.
+		2. 비밀키는 자신만 알고 있다.
+		3. 공개키는 모두가 다 알고 있다. (외부사람 포함)
+		4. 비밀키로 잠근 데이터는 공개키로 열 수 있고,
+			공개키로 잠근 데이터는 비밀키로 열 수 있다.
+
+	기본 비밀키 보안 방식
+
+		1. ssh 패키지
+		2. ssh 접속 클라이언트 (mobaXterm, putty)
+		3. 접속
+
+	1. 포드포워딩 설정
+	2. sudo apt install ssh
+	3. sudo systemctl status ssh 로 active상태 확인
+	4. MobaXterm -> session -> ssh -> Remote host : 192.168.3.29 -> Port : 22 -> ok
+
+< 메일송수신 > 
+- chatgpt 활용방안이 가장 빠름
+기본 제공하는 메일 사용하기
+	1. 메일 서버 동작 확인 (telnet 10.0.2.15 25)	
+	2. 메일 명령어 (mailx)
+	3. 메일 보내기 (ubuntu -> user1)
+	4. 메일 보기 (user1)
+
+	1. sudo apt-get update
+		sudo apt-get install mailutils
+		sudo systemctl status postfix
+	2. telnet 0 25
+	3. mailx user1
+		Cc :
+		Subject : Hello
+	3. echo "Hello User1, This is a test email." | mailx -s "Test Email" user1
+	4. su user1 ->  mail
+
+< 웹 보안 >
+CORS / CSRF
+	
+	[CORS(Cross-Origin Resouce Sharing)]
+	내가 지정한 도메인만 서버에 접근가능.
+	
+	네이버 www.naver.com
+	가짜네이버 www.fake-naver.com - 네이버 서버랑 연결
+
+	[CSRF] 
+	비밀번호 바꾸는 요청을 버튼 만듬(스크립트 심어서 만듬)
+	피해자에게 내 주소를 보낸다
+
+	CSRF 토큰 : 인가된 사용자가 정상적인 방법으로 요청하였는지 확인하는 토큰
+
+	로그인 방식
+	세션(세션아이디) - 토큰(토큰자체)
+	Cookie		- 	Local Storage
+	서버에서 
+	setCookie jSessionID	
+
+	브라우저 저장소
+	Local Storage
+	Session Stroage
+	Cookie
+
+< 면접에서 자주 질문하는 것 >
+
+	[Spring Framework]
+	1. Spring Framework 의 장점이 뭔가요?
+	
+	Flask는 주로 안쓰고
+	Spring VS Node.js 를 주로 사용한다
+	
+	Spring{
+	java
+	타입 O
+	컴파일에러 (실행 전에 오류를 알려준다)
+	}
+	Node.js{
+	javascript (typescript)
+	타입X
+	런타임에러 (실행 중에 오류가 발생한것을 알려준다)
+	}
+	
+	컴파일 : 영어 -> 컴퓨터언어 파일로 변경
+	
+	결론 : 	Spring의 장점 (java : 멀티스레드)
+		1. 자바 : 강력한 타입 시스템
+		2. 다양한 서브 프로젝트들이 많다. (예 > Spring Boot, Spring Security, Spring Batch)
+		3. 개발자의 권한을 스프링이 갖고있다
+	
+		Node.js 의 장점 (javascript : 싱글스레드)
+		1. 비동기 처리가 빠르다 (다중 사용자 일 경우 응답속도 빠름)			
+		2. 설정할 것이 적다
+		3. 실시간 데이터 처리가 빠르다 (실시간 채팅 앱, 게임서버)
+		4. 패키지랑 라이브러리가 훨씬 많다
+		5. 프론트엔드 하다가 백엔드 하려는데 자바부터 안배워도 됨
+
+	IOC ; Inversion Of Controller
+	스프링에서는 인스턴스 권한을 개발자로부터 뺏음.
+	싱글톤으로 유지시킴
+
+	
