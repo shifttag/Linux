@@ -1,0 +1,145 @@
+< 13일차 >
+
+< Web Server >
+
+< WAS ; Web Application Server >
+	
+	같은 주소인데 상황에 따라서 화면이 바뀐다 (동적으로 보이는 것)
+	ex) naver.com 로그인한 화면 / 로그아웃한 화면
+
+	Web Server를 구축할 예정
+	apache / nginx
+
+	원격 접속 프로토콜 : telnet, SSH
+	웹 프로토콜 : http(안전하지 않은 사이트), https
+
+	apache
+
+	( HTTP가 생긴 유래 )
+	HTTP 유럽에서 원자 시험 -> 논문을 각자 방에서 작성 -> 논문 공유 서버 
+	-> 논문을 서버에 usb 갖고가서 내 논문을 업로드 -> 브라우저를 만들어서
+	-> 논문 이름을 치면 해당 논문이 나오게 설정
+	
+HTTP 통신
+Request
+Response
+
+Request    -> 	1. 어떤 것을 요청하는지 (url)
+		2. 요청한 사용자 정보 (header)
+		3. 쿠키 (header)
+		4. 기타 등등 (header)
+		5. 로그인할 때 아이디, 비밀번호 (body)
+
+Response    ->	1. 응답한 시간 (header)
+		2. 응답 상태 (header)
+		3. 요청한 것 응답 (body)
+		4. 기타 등등 (header)
+
+url?password=1234&username=hello <- 쿼리스트링	
+
+응답 코드를 알아두면 좋음 -> 응답코드 뜨는거에 대해서 어디쪽에서 잘못인지 알수 있다.
+
+Request Method (종류)
+	1. GET : 달라고 요청	(body가 없음)
+	2. POST : 주겠다고 요청	(body가 있음)
+	3. PUT : 수정한다고 요청	(body가 있음)
+	4. DELETE  : 삭제한다고 요청	(body가 없음)
+
+	1,4번은 body가 없음 GET과 DELETE로 나누는 이유는 악의적으로 사이트를 삭제할 가능성이 있기 때문에
+	2,3번은 body가 있음
+
+	Restful하다
+	@RestController 에서 사용되는 Rest
+	
+	/book/1	GET
+	/book/1	POST
+
+	/book	PUT
+	/book/1	DELETE
+
+	Restful하지 않다.
+	/book/1/update POST
+	/book/create POST
+
+< apache 서버 구축 >
+	1. apache 패키지 설치
+	2. apache 세팅
+	3. 간단한 페이지 (html)
+	4. 포트포워딩 (포트 번호 찾기)
+	5. 웹 브라우저에 ip주소 쳐서 접속
+
+< 정답 >
+	1. sudo apt install apache2
+		sudo service apache2 status (왠만해서 80포트는 사용중이라 failed 뜰가능성이 큼)
+	2. netstat -tnlp | grep 포트번호	(Local Address : 0.0.0.0 http 가 80포트임)
+		kill -9 {PID번호} (OR) sudo service nginx stop(nginx가 80포트를 사용중이라면 가능한 명령어)
+		sudo service apache2 restart -> sudo service apache2 status (active 확인)
+	3. 포트포워딩으로 포트번호 열어주기
+		방화벽도 열어주기 : sudo ufw allow http
+	4. 웹 브라우저에서 url창에 ip주소 쳐서 접속
+		Apache2 Ubuntu Default Page라는 기본 페이지가 뜰거임 locate a /var/www/html/index.html
+		중간 백업 sudo cp index.html index-backup.html으로 원래 파일 복사
+	5. sudo vim /var/www/html/index.html
+		<!DOCTYPE html>
+		<html>
+     		<head>
+         		   <title>Hello World!!</title>
+     		 </head>
+     		 <body>
+    		   <p>Hello World!</p>
+    		  </body>
+		</html>
+	
+well-known port : 프로토콜에 사용되는 포트 (ex: 80=http, 443=http 등등)
+
+Web Server    ->	정적인 서버
+		html 파일을 그대로 전달.
+
+WAS 	->	동적인 서버
+		html 안에 html 코드가 아닌 다른 코드가 들어가면
+
+Spring Freamwork (Legacy)
+Spring Boot
+.jar(내장 톰캣이 있음)
+.war(내장 톰캣이 없음)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
