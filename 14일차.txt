@@ -1,0 +1,151 @@
+< 14일차 >
+
+< 데이터베이스 >
+데이터 모아놓은 것
+
+SQL(관계형 데이터베이스) [ mySQL,  mariaDB, msSQL, PostgreSQL ]
+	관계형 데이터베이스 구성 요소
+		- 테이블
+	  	  - 열(column, filed)
+	 	  - 행(row, tuple, record)
+	관계형 데이터베이스 연관 관계
+	  - pk를 지정해주고
+	  - 다른  테이블에서 fk를 사용해서
+
+NoSQL(비관계형 데이터베이스) [ MongoDB, Elasticsearch, Apache CouchDB ]
+
+MariaDB
+데이터베이스 / DBMS
+	DBMS : 데이터베이스 관리 시스템
+
+	스키마(schema)
+	데이터베이스(database)
+	테이블(table)
+	- 열(column) 키(key)
+	- 행(row)
+	
+< 데이터베이스 사용 >
+1. mariaDB 패키지 설치
+2. 리눅스에서 st_db 데이터베이스 만들기
+3. 학생 정보 테이블 만들기
+	student_info_tb
+	id 숫자
+	age 숫자
+	name 문자열
+4. 학생 학점 테이블 만들기
+	student_grade_tb
+	id 숫자
+	student_id 숫자(student_info_tb id와 연관관계)
+	grade 숫자
+5. 데이터 집어넣기(INSERT)
+	student_info_tb
+	1 25 KIM
+6. 데이터 조회하기(SELECT)
+
+< 코드 >
+1. sudo apt update
+	sudo apt install mariadb-server
+	sudo mariadb -u root -p
+2. CREATE DATABASE st_db;
+	USE st_db;
+3. CREATE TABLE student_info_tb (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    age INT,
+   );
+4. CREATE TABLE student_grades_tb (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    grade INT,
+    FOREIGN KEY (student_id) REFERENCES student_info_tb(id)
+   );
+
+desc student_info_tb;
+desc student_grade_tb
+
+5. INSERT INTO student_info_tb (id, age, name) VALUES (1, 25, 'KIM');
+
+6. 여러개의 데이터를 집어놓고 조인해서 사용하기
+
+7. ERROR 1698 (28000):
+Access denied for user 'ubuntu'@'localhost'
+에러 해결하기
+
+[ ubuntu 유저를 하나 새로 생성하여 그 유저에게 권한을 주는 코드 ]
+sudo mysql -> create user 'ubuntu'@'localhost' identified by '1234'; -> grant all privileges on *.* to 'ubuntu'@'localhost';
+(sql을 나간 후) -> mysql -u ubuntu -p -> 1234 ->
+
+< 통신할 때 타입 >
+Content-Type
+MIME-TYPE
+json(JavaScript Object Notation)
+www-encoded-form-url (옛날꺼)
+xml (옛날꺼)
+
+<spring boot 하는사람은 중요한것>
+MIME-TYPE
+json : application / json
+@RestController	@RequestBody
+
+www-encoded-form-url
+@Controller
+
+xml : application / xml
+</spring boot 하는사람은 중요한것>
+
+xml 안쓰고 json 사용하는이유는
+xml 은 태그(<body> / </body>)를 사용하고 json은 { "name" : "John Doe"} 식으로 쓰기 때문에 보내야할 문자수가 적어져
+json을 사용한다
+
+중간 언어
+Server - 통신 - Client
+java      json    dart
+
+
+< 추가 정보? spring boot >
+Connected is full?
+too many conntions?
+
+Spring boot;
+
+hikariCP <--------------------- DB 커넥션 풀
+system start 12.3s
+
+1 2 3 4 5 6 7 8
+o o o
+
+자바 리플렉션
+
+클래스
+생성자
+메서드
+필드
+어노테이션 정보들을 갖고 올 수 있다
+private 여도 리플렉션으로 정보를 가져올 수 있다
+
+@Controller
+@Serveice <---------- 컴포넌트(@Component)
+
+스프링 부트가 실행할 때, 컴포넌트를 스캔한다
+스캔한 컴포넌트들을 IOC 컨테이너에 넣는다
+인스턴스된 컴포넌트를 스프링에서는 Bean 이라고 함
+
+Flutter Getlt <- 싱글톤을 위해서 사용, 스프링의 IOC 컨테이너와 같은 개념
+
+< 디자인 패턴 >
+프로그래밍 잘 하는 애들이 모여서 프로그래밍에서 
+자주 발생하는 문제를 해결하기 위해 공통된 설계 패턴을 정의한 것
+
+브릿지 패턴
+팩토리메서드 패턴
+싱글톤 패턴
+	- 전체 프로그램에서 단 하나의 인스턴스만 생성
+	- 이 인스턴스에 대한 전역적인 접근을 제공
+	- 다른 객체들은 이 인스턴스를 참조하여 사용
+	사용하는 이유
+	- 인스턴스를 여러개 생성하면 문제가 발생하는 경우
+	- 인스턴스 생성 후 해당 객체가 변경될 필요가 없는 경우
+어댑터 패턴
+	- 인터페이스를 수정할 수 없는 경우
+전략 패턴
+옵저버 패턴
