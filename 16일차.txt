@@ -1,0 +1,125 @@
+< 16일차 >
+
+쉘 스크립트 : 
+public void main(arg){
+    system.out.println("hello1");
+    system.out.println("hello2");
+    system.out.println("hello3");
+}
+
+결과 : 
+hello1
+hello2
+hello3
+
+쉘 프롬프트 : 명령어를 한 줄씩 읽는 것
+
+< 리눅스로 쉘 스크립트 짜는방법 >
+
+vim shell-script-test.sh
+	#! /bin/bash
+
+	echo "Hello!"
+	echo "Linux!"
+
+실행 : sh shell-script-test.sh
+
+< 로그파일로 만들기 >
+	#! /bin/bash
+
+	echo "Hello!" > result.log
+	echo "Linux!" >> result.log
+
+실행 : cat result.log
+
+< 변수 선언 >
+	#! /bin/bash
+
+	echo "Hello!"
+	echo "Linux!"
+
+	name="donghyeon"
+
+	echo $name
+	echo ${name}isme
+
+결과 :
+Hello!
+Linux!
+donghyeon
+donghyeonisme
+
+< 입력 명령어 >
+: 입력받은 텍스트를 출력 시키는 명령어
+목표 : I texted {hello}
+
+	read text
+	echo "I texted $text"
+
+결과 I texted hello
+
+< 입력 받은 텍스트 패키지 우분투 리파지토리에서 찾기 >
+	echo "package_name"
+	read package_name
+
+	echo "Searching for $package_name in Ubuntu package repository..."
+	apt search "${package_name}"
+
+< 입력 받은 텍스트 패키지 우분투 리파지토리에서 설치하기 + 설치 로그들 프롬프트창에 안나오게 하기>
+	echo "package_name"
+	read package_name
+
+	echo "Searching for $package_name in Ubuntu package repository..."
+	sudo apt install "${package_name}" > /dev/null
+
+	sudo apt install -y docker.io (중간에 y/n 묻는 말 없이 설치)
+		(sudo 명령어 사용시 password 입력 안받게 설정하기)
+		: sudoers 파일 수정
+
+	su root
+	sudo vim /etc/sudoers
+	chmod 640 /etc/sudoers
+
+		ubuntu ALL=(ALL) NOPASSWD : ALL
+	su ubuntu
+	sudo apt search 
+
+< 현재 시간 출력 >
+: date
+Now, Time is 11:42:29
+	#! /bin/bas
+
+	time=$(date +"%T")
+	hour=$(echo $time | cut -d: -f1)
+	minute=$(echo $time | cut -d: -f2)
+	second=$(echo $time | cut -d: -f3)
+
+	echo "Now, Time is $hour : $minute : $second ."
+
+토크나이저 (Tokenizer 구분자 /)
+: "1/2/3/4/5"
+[ "1", "2", "3", "4", "5"]
+
+awk : 띄워쓰기를 구분자로 토크나이저
+date | awk '{print $5}' 하면 시간만 출력해줌
+
+'' : 내부에 텍스트를 문자열 자체로 인식
+"" : 내부에 특수문자의 경우 변수나 명령어 등으로 해석
+
+< if 문 >
+입력받은 문자열이 hello랑 같으면 yes출력 다르면 no출력
+
+	echo "문자열을 입력하시오"
+	read input
+
+	if [ "$input" = "hello" ]; then
+       	    echo "yes"
+	else
+      	     echo "no"
+	fi
+
+sudoers 파일은 수정할때 조심하기
+
+변수명=변수값 O
+변수명 = 변수값 X
+; 사용 금지 (if문 제외)
