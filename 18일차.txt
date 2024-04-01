@@ -1,0 +1,126 @@
+< 18일차 >
+
+< 프롬프트 창에서 변수 사용 가능한지 >
+test_var = 'test'
+echo ${test_var}
+
+< 이것을 쉘 프롬프트 스크립트에서 사용 가능한지 >
+vim shell-var-test.sh
+	#!/bin/bash
+
+	echo ${test_var}
+
+
+sh shell-var-test.sh
+
+< 쉘 변수 (지역변수) >
+현재 쉘에서만 사용이 가능하다.
+서브 쉘로는 전달되지 않는다.
+
+< 환경 변수 (전역변수) >
+현재 쉘 뿐만 아니라 서브 쉘에서도 사용 가능.
+
+< 환경변수 >
+set : 환경 변수 및 쉘 변수 출력
+	set | grep HOME
+	set | grep test_var
+	
+env : 환경변수만 출력
+	env | grep HOME
+	env | grep test-var (출력 안됨)		
+
+1) test-var를 환경변수로 변경시키기
+	export test_var
+2) test-var를 쉘 변수로 변경시키기 
+	export -n test_var
+3) test-var 변수 없애기
+	unset test_var
+
+1. openjdk-11 설치하기 (설치되어 있다면 생략)
+2. 타임존 서울로 세팅
+3. 
+
+
+
+정답 1. 
+if [ -z "$(dpkg -l | grep openjdk-11)" ]; then
+        echo "openJDK 11 설치를  시작합니다..."
+
+        sudo apt update
+
+        sudo apt-cache install -y openjdk-11-jdk
+
+        echo "openJDK 11 설치를 완료했습니다..."
+else
+        echo " openJDK 11이 설치되어 있습니다. 설치를 생략합니다."
+fi
+
+
+정답 2. 
+echo " 서울 타임존"
+sudo timedatectl set-timezone Asia/Seoul
+
+date
+
+
+< 깃허브에서 파일 다운내려받기 >
+git clone (url주소)
+	git clone http://github.com/NomadHuns/aws-v2.git
+하면 aws-v2 라는 파일이 내려받아진다
+그 파일 안에 여러 디렉터리가 존재한다.
+
+1. 소스코드를 코딩한다
+2. 기계어로 변환한다
+3. 실행 파일로 컴퓨터가 실행한다
+
+1-1  소스코드를 코딩한다.
+1-2  빌드 한다(jar 파일이 생성된다.) - gradle이라는 파일이 빌드해준다
+	./gradlew build
+	chmod 774 ./gradlew
+	cd build/libs
+	java -jar ./aws-v2-0.0.1.jar
+1-3  jar파일을 실행한다 - jdk 가 jar파일을 실행해준다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
