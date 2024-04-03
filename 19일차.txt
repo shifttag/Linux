@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# set variables
+JDK_PACKAGE_NAME="openjdk-11-jdk"
+PROJECT_NAME="aws-v2"
+PROJECT_VERSION="0.0.1"
+GIT_USERNAME="NomadHuns"
+SELETED_TIME_ZONE="Asia/Seoul"
+GIT_URL="http://github.com/${GIT_USERNAME}/${PROJECT_NAME}.git"
+JAR_PATH="${HOME}/${PROJECT_NAME}/build/libs/${PROJECT_NAME}-${PROJECT_VERSION}.jar"
+echo "complete to set variables"
+
+# TODO kill da project process
+# need 2 check da project process b4 kill 
+
+# update package manager
+echo "try to update package manager list"
+# sudo apt update -y
+echo "comlete to update package manager list"
+
+# TODO have to check to run the server already 
+# and need to use if expression for first deploy
+
+# install openjdk-11
+if [ -z "$(dpkg -l | grep ${JDK_PACKAGE_NAME})" ]; then
+	echo "${JDK_PACKAGE_NAME} is not installed"
+	sudo apt-cache install -y ${JDK_PACKAGE_NAME}
+else
+	echo "${JDK_PACKAGE_NAME} is already installed"
+fi
+
+# set timezone
+sudo timedatectl set-timezone ${SELECTE_TIME_ZOME}
+echo "${SELECTE_TIME_ZOME} : done to set timezone"
+
+# delete folder
+rm -rf ${HOME}/${PROJECT_NAME} > /dev/null
+echo "complete to delete ${PROJECT_NAME} the project folder"
+
+# git clone
+echo "try to clone a spring boot project from github : url is ${GIT_URL}"
+git clone ${GIT_URL}
+echo "complete to clone the spring boot project"
+
+# grant authority to gradlew
+chmod u+x ${HOME}/${PROJECT_NAME}/gradlew
+echo "done to grant authority to build files"
+
+# build jar file
+cd ${HOME}/aws-v2
+echo "try to build files"
+./gradlew clean build
+echo "complete to build files"
+
+# start spring boot server
+echo "run to run server build file"
+nohup java -jar ./build/libs/aws-v2-0.0.1.jar 1>${HOME}/log.out 2>${HOME}/err.out &
+
+# TODO have to check server status constantly
+
+
+
+
+pgrep -f aws-v2-0.0.1.jar
+
+vim check-and-restart.sh
+
+#!/bin/bash
+
+source ./var.sh
+
+
+
+if [ -z ${PROJECT_PID} ]; then
+        nohup java -jar ${JAR_PATH} 1>${HOME}/log.out 2>${HOME}/err.out &
+else
+        echo "its runnung!"
+fi
+
+
+
+
