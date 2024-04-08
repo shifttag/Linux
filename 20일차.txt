@@ -1,0 +1,67 @@
+< 20일차 >
+
+클라우드 컴퓨팅 서비스
+: 우리가 서버 컴퓨터를 빌렸다고 생각하면 된다.
+
+	IaaS(Infrastructure as a Service) : 서버 컴퓨터를 제공하는 서비스
+	PaaS(platform as a Service) : Iaas + OS + 개발도구 + DBMS가 포함된 플랫폼 제공
+	SaaS(Software as a Service) : 인터넷을 통해 소프트웨어를 제공하는 서비스 
+
+AWS 탄생 비화
+: 원래는 서버 100대로 사용자를 수용 가능한데, 블랙프라이데이때 10000대가 있어야 수용 가능
+남는 9900대의 서버를 빌려준다.
+
+git clone https://github.com/NomadHuns/aws_deploy_project.git
+jdk 8 버전 패키지 설치
+sudo apt update
+sudo apt install openjdk-8-jdk
+
+cd aws_deploy_project/src/main/resources
+vim application.yml 수정
+	spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    #    url: jdbc:h2:~/test
+    #  url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1
+    # driverClassName: org.h2.Driver
+    # username: sa
+    # password:
+     url: jdbc:mariadb://mydatabase-1.c9w8g04myami.us-east-1.rds.amazonaws.com:3306/temp?characterEncoding=utf-8&serverTimezone=Asia/Seoul
+     driverClassName: org.mariadb.jdbc.Driver
+     username: admin
+     password: 12341234
+     # h2:
+     # console:
+     # enabled: true
+     # path: /h2
+  sql:
+    init:
+      encoding: UTF-8
+      schemaLocations: classpath:h2/schema.sql
+      dataLocations: classpath:h2/data.sql
+      mode: always
+
+server:
+  servlet:
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
+  port: 8070
+
+mybatis:
+configuration:
+    map-underscore-to-camel-case: true
+
+저장하고 나와서
+
+cd 
+cd aws_deploy_project
+./gradlew clean build --exclude-task test
+cd build/libs					(plain 파일 : 라이브러리가 없는 파일)
+nohup  java -jar ./mybatis_prohect-0.0.1-SNAPSHOT.jar 1>${HOME}/log.out 2>${HOME}/err.out &
+
+보안그룹 포트 (3306, 8070) 설정
+
+url = awsIP:8070
